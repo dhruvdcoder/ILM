@@ -1,0 +1,15 @@
+# @package _global_
+
+global_flags:
+  NO_WRITE: false
+
+trees_output_dir: ${paths.output_dir}/trees
+
+tags:
+  debug: true
+
+hydra:
+  job_logging:
+    loggers:
+      __main__:
+        level: DEBUG

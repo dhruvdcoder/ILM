@@ -1,0 +1,50 @@
+# @package _global_
+global_flags:
+  DEBUG: true
+
+
+train_data:
+  split: train[:10000]
+
+create_train_dataloader:
+  num_workers: 0
+  batch_size: 64
+  pin_memory: false
+
+trainer:
+  max_epochs: 100
+  devices: 1
+  accelerator: "gpu"
+  progress_bar_update_frequency: 1
+  train_log_frequency: 1
+  checkpoint_frequency: null # Disable checkpointing
+  #loggers:
+  #  _target_: lightning.fabric.loggers.TensorBoardLogger
+  #  root_dir: ${paths.output_dir}/tensorboard
+  #callbacks:
+  #  _target_: pcdd.utils.fabric_training.TensorboardLogGradients
+  #  log_frequency: 1
+
+forward_diffusion:
+  noise_schedule:
+    T: 10
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0001
+  weight_decay: 0.01
+
+job_name: debug
+
+tags:
+  debug: true
+
+hydra:
+  job_logging:
+    loggers:
+      __main__:
+        level: DEBUG
+      datasets:
+        level: DEBUG
+      datasets.arrow_dataset:
+        level: DEBUG

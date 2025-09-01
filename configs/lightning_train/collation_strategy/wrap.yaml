@@ -1,0 +1,6 @@
+# @package _global_
+datamodule:
+  collation_strategy: wrap
+
+tags:
+  collation_strategy: wrap

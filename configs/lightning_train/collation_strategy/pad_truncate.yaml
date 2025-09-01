@@ -1,0 +1,6 @@
+# @package _global_
+datamodule:
+  collation_strategy: pad_truncate
+
+tags:
+  collation_strategy: pad_truncate

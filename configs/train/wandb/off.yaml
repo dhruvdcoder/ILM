@@ -1,0 +1,8 @@
+# @package _global_
+
+use_wandb: false
+
+hydra:
+  job:
+    env_set:
+      WANDB_WATCH: "all"

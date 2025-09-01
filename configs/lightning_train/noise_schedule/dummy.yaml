@@ -1,0 +1,9 @@
+# @package _global_
+
+noise_schedule:
+  _target_: pcdd.noise_schedule.DummyNoiseSchedule
+
+tags:
+  noise_schedule: dummy
+  correlated_t: false
+  T: 0

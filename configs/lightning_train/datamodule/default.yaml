@@ -1,0 +1,34 @@
+_target_: pcdd.datamodule.DiffusionForTextDataModule
+manual_cache_dir: ${oc.env:DATA_DIR, data}
+dataset_name: ??? # set by dataset
+hf_dataset_kwargs:
+  # Anything that goes into `datasets.load_dataset`
+  # https://huggingface.co/docs/datasets/v3.1.0/en/package_reference/loading_methods#datasets.load_dataset
+  # execpt split
+  path: ??? # set by dataset
+tokenizer: ??? # set by dataset
+global_batch_size: 512 # global
+train_dataloader_kwargs:
+  batch_size:  64 # per device, depends on the device type
+  num_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}} 
+  shuffle: True
+  pin_memory: True
+val_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size} # same as training batch size to avoid recompilation
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: True
+test_dataloader_kwargs: null
+
+block_size: ??? # set by dataset
+collation_strategy: ??? # set by dataset
+detokenizer: ??? # set by dataset
+train_split: train
+val_split: validation
+test_split: test
+text_field_name: text
+num_dataset_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}}
+
+columns_to_remove: null
+
+rewrite_manual_cache: false

@@ -1,0 +1,40 @@
+# @package _global_
+defaults:
+- override /model_type: ilm_stopping
+- override /model: rotary_transformer_small_ilm_stopping
+- override /datamodule: ilm_stopping_stories
+- override /dataset: stories
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+
+model:
+  final_layer_without_normalization: true
+
+compile: true
+trainer:
+  max_steps: 100_000
+  precision: bf16-mixed
+  val_check_interval: 10000
+
+datamodule:
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128. Will use around 38 GB VRAM
+    batch_size: 64 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 64 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+    drop_last: false
+    pin_memory: false
+
+generative_perplexity:
+  evaluators: null
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1000
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

@@ -1,0 +1,22 @@
+# @package _global_
+defaults:
+  - mdlm_stories
+  - /generation: default
+
+# python src/pcdd/commands/lightning_main_v2.py experiment=mdlm_stories_generate generation.ckpt_path=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/mdlm_stories/checkpoints/11-50000.ckpt generation.output_dir=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/mdlm_stories/predictions/11-50000 generation.output_file_name=unconditional_stories_max_steps_512 predictor.max_steps=512
+
+job_type: generate
+job_name: mdlm_stories_generate
+compile: false
+generation:
+  ckpt_path: ???
+  output_dir: ???
+
+predictor:
+  max_steps: ???
+
+
+
+tags:
+  prediction_dataset: stories
+  prediction_task: unconditional

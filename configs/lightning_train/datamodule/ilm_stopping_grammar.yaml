@@ -1,0 +1,5 @@
+defaults:
+  - grammar
+
+_target_: pcdd.datamodule.grammar.CFGDataModuleForILM
+

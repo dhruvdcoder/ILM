@@ -1,0 +1,51 @@
+# @package _global_
+defaults:
+  - override /model: ilm_stopping
+  - override /model: gpt2_tiny2_ilm_stopping
+  - override /datamodule: star_ilm
+  - override /dataset: vstar_small_v2
+  - override /collation_strategy: default
+  - override /noise_schedule: dummy
+
+compile: false
+trainer:
+  max_steps: 40_000
+  precision: bf16-mixed
+  val_check_interval: null
+  check_val_every_n_epoch: 2
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 500
+
+
+datamodule:
+  train_dataloader_kwargs:
+    batch_size: 64
+  predict_dataloader_kwargs:
+    batch_size: 64
+    drop_last: false
+    pin_memory: false
+
+lightning_module:
+  _target_: pcdd.diffusion.ilm_v2.ILMLightningModuleForStarGraphs
+
+generative_perplexity:
+  evaluators: null
+
+callbacks:
+  checkpoint_monitor:
+    monitor: val/ce
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 200
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

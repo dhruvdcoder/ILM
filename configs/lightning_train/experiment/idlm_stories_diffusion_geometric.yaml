@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - idlm_stories
+  - override /noise_schedule: idlm_geometric
+
+noise_schedule:
+  sigma_min: 2
+  sigma_max: 1000

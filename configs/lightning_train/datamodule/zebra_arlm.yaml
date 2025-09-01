@@ -1,0 +1,5 @@
+defaults:
+  - zebra
+_target_: pcdd.datamodule.zebra.ZebraDataModuleForARLM
+tokenizer:
+  _target_: pcdd.datamodule.zebra.ARLMZebraTokenizer.from_default_config

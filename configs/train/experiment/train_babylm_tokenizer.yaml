@@ -1,0 +1,42 @@
+# @package _global_
+defaults:
+  - override /data@train_data: babylm
+
+tokenizer_components:
+  tokenizer:
+    _target_: tokenizers.Tokenizer
+    _args_:
+      - _target_: tokenizers.models.Unigram
+
+  normalizer: 
+    _target_: tokenizers.normalizers.NFKC
+  pre_tokenizer:
+    _target_: tokenizers.pre_tokenizers.ByteLevel
+  decoder:
+    _target_: tokenizers.decoders.ByteLevel
+  trainer:
+    _target_: tokenizers.trainers.UnigramTrainer
+    vocab_size: 4000
+    initial_alphabet:
+      _target_: tokenizers.pre_tokenizers.ByteLevel.alphabet
+    special_tokens: 
+      _target_: builtins.list
+      _args_: 
+        - ["<|pad|>", "<|mask|>", "<|unk|>", "<|eos|>", "<|bos|>"]
+
+
+batch_size: 1000
+
+train_data:
+  split: "train+validation+test"
+
+job_name: babylm_unigram_tokenizer
+
+paths:
+  output_dir: ${paths.data_dir}/babylm
+
+output_dir: ${paths.output_dir}/unigram-tokenizer.json
+
+tags:
+  task: Tokenizer
+  dataset: babylm

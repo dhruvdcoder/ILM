@@ -1,0 +1,5 @@
+# @package _global_
+
+job_type: preprocess_data
+datamodule:
+  rewrite_manual_cache: true

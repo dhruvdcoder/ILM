@@ -1,0 +1,12 @@
+# @package _global_
+
+dataset:
+  _target_: datasets.load_dataset
+  path: lm1b
+  split: train
+
+num_examples: 10000
+job_name: lm1b_generative_perplexity
+
+tags:
+  dataset: lm1b

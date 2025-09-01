@@ -1,0 +1,5 @@
+# @package _global_
+# leave blank for default collation strategy
+
+tags:
+  collation_strategy: default

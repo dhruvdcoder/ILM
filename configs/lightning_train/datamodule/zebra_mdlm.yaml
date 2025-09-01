@@ -1,0 +1,7 @@
+defaults:
+  - zebra
+
+_target_: pcdd.datamodule.zebra.ZebraDataModuleForMDLM
+
+tokenizer:
+  _target_: pcdd.datamodule.zebra.MDLMZebraTokenizer.from_default_config

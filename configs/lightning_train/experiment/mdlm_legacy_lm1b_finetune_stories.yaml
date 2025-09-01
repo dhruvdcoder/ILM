@@ -1,0 +1,39 @@
+# @package _global_
+defaults:
+- override /model_type: mdlm
+- override /model: ddit_small_mdlm
+- override /datamodule: mdlm_stories
+- override /dataset: stories
+- override /collation_strategy: default
+- override /noise_schedule: loglinear_v2
+
+
+
+# init from lm1b
+model_only_checkpoint_path: logs/lm1b_absorbing_predict_pad_legacy/models/14-854500.pt
+
+compile: true
+trainer:
+  max_steps: 80_000
+  precision: bf16-mixed
+
+datamodule:
+  tokenizer:
+    _target_: pcdd.datamodule.datamodule.LegacyBertTokenizerForMDLMFast.from_pretrained
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128
+    batch_size: 64
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 64
+    drop_last: false
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1000
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

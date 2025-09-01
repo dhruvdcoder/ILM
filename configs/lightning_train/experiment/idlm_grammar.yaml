@@ -1,0 +1,101 @@
+# @package _global_
+# v3
+# we pass time instead of total_noise to the model
+# v4
+# we pass time instead of total_noise to the model
+# we use loglinear noise schedule
+# we use length loss
+# we use incomplete gamma factor
+# we use n_drops for ce
+# we send t to the model
+
+defaults:
+- override /model_type: idlm
+- override /model: ddit_small_idlm
+- override /datamodule: idlm_grammar
+- override /dataset: grammar
+- override /collation_strategy: default
+#- override /noise_schedule: idlm_loglinear
+- override /noise_schedule: idlm_poisson
+
+lightning_module:
+  _target_: pcdd.diffusion.idlm_v2.IDLMLightningModuleForCFG
+
+model:
+  #_target_: pcdd.models.idlm.DDITIDLMModelFinalLength
+  final_layer_without_normalization: true
+  period_for_time_embedding: 0.5 # separates time which is in [0,1] well
+
+compile: true
+
+#noise_schedule:
+#  _target_: pcdd.noise_schedule.idlm.LogLinearNoiseSchedule
+#  sigma_min: 1
+#  sigma_max: 100
+#  eps: 1e-3
+noise_schedule:
+  _target_: pcdd.noise_schedule.idlm.PoissonNoiseSchedule
+  sigma: 10
+  eps: 1e-3
+
+loss:
+  ce_weight: 0.1
+  length_loss_weight: 0.1
+  length_loss: diffusion
+  use_diffusion_weight_for_ce: true
+  use_diffusion_weight_for_length_loss: true
+  use_incomplete_gamma_factor: true
+  use_n_drops_for_ce: true
+  send_t_to_model: true
+
+predictor:
+  sampling_method: sample_top_p
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  max_steps: 100
+  max_length: ${datamodule.block_size}
+  use_first_step_factor: true
+  send_t_to_model: ${loss.send_t_to_model}
+  length_temperature: 1.0
+
+trainer:
+  max_steps: 100_000
+  precision: bf16-mixed
+  check_val_every_n_epoch: null 
+  val_check_interval: 1000
+
+optimizer:
+  lr: 0.0001
+
+datamodule:
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128. Will use around 38 GB VRAM
+    batch_size: 256 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 256 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+    drop_last: false
+    pin_memory: false
+  
+  
+callbacks:
+  checkpoint_monitor:
+    monitor: val/ce
+  checkpoint_every_n_steps:
+    every_n_train_steps: 1000
+    keep_multiple: 5
+
+
+generative_perplexity:
+  evaluators: null
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 100
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

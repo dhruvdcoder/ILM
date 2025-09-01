@@ -1,0 +1,23 @@
+defaults:
+  - arlm_stories
+  - /generation: default
+
+job_type: generate
+job_name: arlm_stories_generate
+generation:
+  ckpt_path: ???
+  output_dir: null
+
+predictor:
+  sampling_method: sample_top_p
+  p: 0.5
+  max_steps: 1024
+  max_length: 1024
+
+datamodule:
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+tags:
+  prediction_dataset: stories
+  prediction_task: unconditional

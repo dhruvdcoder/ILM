@@ -1,0 +1,28 @@
+# @package _global_
+defaults:
+  - mdlm_legacy_lm1b
+  - /generation: default
+
+
+job_type: generate
+job_name: mdlm_lm1b_generate_timed
+compile: false
+generation:
+  ckpt_path: ???
+  output_dir: ???
+  fields_to_keep_in_output:
+    - "text"
+    - "time_taken"
+
+predictor:
+  max_steps: ???
+
+datamodule:
+  num_unconditional_samples: 1000
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+
+tags:
+  prediction_dataset: lm1b
+  prediction_task: unconditional_timed_${predictor.max_steps}

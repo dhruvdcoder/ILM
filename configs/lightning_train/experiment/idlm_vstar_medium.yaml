@@ -1,0 +1,58 @@
+# @package _global_
+defaults:
+- override /model_type: idlm
+- override /model: ddit_small_idlm
+- override /datamodule: star_idlm
+- override /dataset: vstar_medium_v2
+- override /collation_strategy: default
+- override /noise_schedule: poisson
+
+model:
+  final_layer_without_normalization: true
+
+noise_schedule:
+  sigma: 22.0
+
+loss:
+  use_constraint: true
+
+lightning_module:
+  _target_: pcdd.diffusion.idlm_v2.IDLMLightningModuleForStarGraphs
+
+predictor:
+  sampling_method: sample_top_k
+  top: 1
+  second_sampling_method: sample_top_k
+  second_top: 1
+  max_steps: 500
+
+compile: false
+
+trainer:
+  precision: 32
+  val_check_interval: null
+  check_val_every_n_epoch: 2
+  max_steps: 80000
+  max_epochs: null
+
+generative_perplexity:
+  evaluators: null
+
+optimizer:
+  lr: 0.0001
+
+callbacks:
+  checkpoint_every_n_steps:
+    every_n_train_steps: 500
+    keep_multiple: 100
+  checkpoint_monitor:
+    monitor: val/ce
+
+lr_scheduler:
+  name: constant
+
+tags:
+  compile: ${compile}
+  precision: ${trainer.precision}
+
+

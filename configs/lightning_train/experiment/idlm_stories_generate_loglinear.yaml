@@ -1,0 +1,38 @@
+# @package _global_
+# python src/pcdd/commands/lightning_main_v2.py experiment=idlm_stories_generate generation.ckpt_path=logs/idlm_stories_geometric/checkpoints/19-84500.ckpt
+defaults:
+  - idlm_stories_diffusion_loglinear
+  - /generation: default
+
+job_type: generate
+job_name: idlm_stories_generate_loglinear
+
+compile: false
+
+generation:
+  ckpt_path: ???
+  output_file_name: null
+  output_dir: null
+  fields_to_keep_in_output:
+    - "text"
+    #- "time_taken"
+
+predictor:
+  sampling_method: sample_top_p
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  max_steps: 1024
+  max_length: 1024
+  use_first_step_factor: true
+  length_temperature: 1.0
+
+
+datamodule:
+  num_unconditional_samples: 1000
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+tags:
+  prediction_dataset: stories
+  prediction_task: unconditional

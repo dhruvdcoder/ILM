@@ -1,0 +1,18 @@
+defaults:
+  - mdlm_stories
+
+_target_: pcdd.datamodule.stories.StoriesForMDLMInfillingDataModule
+infill_dataset_name: tiny_stories
+infill_percent: 20
+infill_type: sentences
+num_dataset_workers: 4
+predict_dataloader_kwargs:
+  batch_size: 1
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  drop_last: false
+  pin_memory: false
+
+
+block_size: 1024

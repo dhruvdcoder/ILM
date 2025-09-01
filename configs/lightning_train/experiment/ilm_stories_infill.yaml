@@ -1,0 +1,16 @@
+# @package _global_
+# python src/pcdd/commands/lightning_main_v2.py experiment=ilm_stories_infill generation.ckpt_path=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/ilm_lm1b_stories/checkpoints/11-50000.ckpt
+defaults:
+  - ilm_stories_generate
+  - /datamodule@generation.datamodule: ilm_stopping_stories_infill
+
+job_name: ilm_stories_infill
+
+generation:
+  input_field_to_display: masked_input_ids
+
+predictor:
+  force_predict_first_step: true
+
+tags:
+  prediction_task: infill

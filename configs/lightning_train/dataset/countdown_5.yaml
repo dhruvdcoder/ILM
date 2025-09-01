@@ -1,0 +1,16 @@
+# @package _global_
+
+datamodule:
+  version: 5
+  block_size: 80
+
+predictor:
+  max_length: ${datamodule.block_size}
+  max_steps: 80
+
+lightning_module:
+  num_expressions: ${eval:${datamodule.version}-1}
+
+tags:
+  dataset: countdown_5
+  tokenizer: countdown_tokenizer

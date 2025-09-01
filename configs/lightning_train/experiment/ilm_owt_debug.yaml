@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+- override /model_type: ilm
+- override /model: rotary_transformer_small_ilm_stopping
+- override /datamodule: ilm_stopping_owt
+- override /dataset: owt
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+- _self_
+
+global_flags:
+  DEBUG_OWT: true
+
+model:
+  final_layer_without_normalization: true
+
+
+loss:
+  _target_: pcdd.diffusion.ilm_v2.ILMLossWithMaskedCEForWrappedPaddedSequences

@@ -1,0 +1,11 @@
+# @package _global_
+defaults:
+  - rotary_transformer
+
+
+model:
+  num_layers: 6
+  nhead: 6
+
+tags:
+  model: rotary_transformer_tiny

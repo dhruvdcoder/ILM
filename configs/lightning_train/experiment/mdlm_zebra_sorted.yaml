@@ -1,0 +1,7 @@
+# @package _global_
+# @package _global_
+defaults:
+- mdlm_zebra
+- override /dataset: zebra_sorted
+
+

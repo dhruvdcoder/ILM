@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+- ilm_countdown_5
+
+job_type: eval
+
+eval:
+  checkpoint_path: ???
+  split: test
+
+
+compile: false
+
+
+generative_perplexity:
+  evaluators: null
+
+
+

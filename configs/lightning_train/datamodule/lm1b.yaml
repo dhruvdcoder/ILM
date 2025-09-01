@@ -1,0 +1,37 @@
+_target_: ??? # model specific datamodule
+manual_cache_dir: ${oc.env:DATA_DIR, data}
+tokenizer: ??? # model specific tokenizer
+train_dataloader_kwargs:
+  batch_size:  64 # per device, depends on the device type
+  num_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}} 
+  shuffle: null # can't specify shuffle for IterableDataset
+  pin_memory: True
+  persistent_workers: False # INFO: see: https://github.com/huggingface/datasets/issues/7447
+  prefetch_factor: 5
+  drop_last: True
+val_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size} # same as training batch size to avoid recompilation
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: null # can't specify shuffle for IterableDataset
+  pin_memory: True
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: True
+test_dataloader_kwargs: 
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: null # can't specify shuffle for IterableDataset
+  pin_memory: True
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: True
+predict_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: null # can't specify shuffle for IterableDataset
+  pin_memory: False
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: False
+noise_schedule: ${noise_schedule}
+
+rewrite_manual_cache: false
+global_batch_size: 512
+block_size: 128

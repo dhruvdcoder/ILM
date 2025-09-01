@@ -1,0 +1,13 @@
+# @package _global_
+defaults:
+- override /model_type: mdlm
+- override /model: ddit_small_mdlm
+- override /datamodule: mdlm_lm1b
+- override /dataset: lm1b_v2
+- override /collation_strategy: default
+- override /noise_schedule: loglinear_v2
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

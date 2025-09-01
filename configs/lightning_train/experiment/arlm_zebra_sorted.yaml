@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+- arlm_zebra
+- override /dataset: zebra_sorted
+
+

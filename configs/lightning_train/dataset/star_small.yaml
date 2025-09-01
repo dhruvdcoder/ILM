@@ -1,0 +1,38 @@
+# @package _global_
+
+datamodule:
+  train_generator:
+    _target_: pcdd.datamodule.star.SimpleStarGraphGenerator
+    count: 50000
+    degree: 3
+    pathlength: 5
+    vocab_size: 20
+  val_generator:
+    _target_: ${..train_generator._target_}
+    count: 100
+    degree: ${..train_generator.degree}
+    pathlength: ${..train_generator.pathlength}
+    vocab_size: ${..train_generator.vocab_size}
+  test_generator:
+    _target_: ${..train_generator._target_}
+    count: 5000
+    degree: ${..train_generator.degree}
+    pathlength: ${..train_generator.pathlength}
+    vocab_size: ${..train_generator.vocab_size}
+  tokenizer:
+    vocab_size: ${..train_generator.vocab_size}
+  #block_size: ${eval:2*2*${.train_generator.pathlength}*${.train_generator.degree}-2*2*${.train_generator.degree}+4+${.train_generator.pathlength}} # 2*2(pl-1)*d + 4 + pl
+  block_size: ${eval:2*${.train_generator.pathlength}*${.train_generator.degree}-2*${.train_generator.degree}+3+2*${.train_generator.pathlength}-2} # 2*(pl-1)*d + 3 + 2*(pl-1)
+
+loss:
+  special_tokens_to_suppress: [mask_token, edge_sep_token, source_goal_sep_token, pad_token, bos_token, eos_token, unk_token]
+
+predictor:
+  max_length: ${datamodule.block_size}
+  max_steps: 200
+  special_tokens_to_suppress: [mask_token, edge_sep_token, source_goal_sep_token, pad_token, bos_token, eos_token, unk_token]
+
+  
+tags:
+  dataset: star_small
+  tokenizer: star_graph_tokenizer

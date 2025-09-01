@@ -1,0 +1,21 @@
+# @package _global_
+
+
+model:
+  _target_: pcdd.models.d3pm.AbsorbingDDiTD3PMModel
+  num_embeddings: ${tokenizer:full_vocab_size}
+  d_model: 768
+  num_layers: 12
+  nhead: 12
+  padding_idx: null # set to  ${tokenizer:pad_token_id} if loss_on_padding is true
+  mask_idx: ${tokenizer:mask_token_id}
+  dim_feedforward: ${eval:${.d_model}*4}
+  dropout: 0.1
+  activation: "relu"
+  layer_norm_eps: 1e-5
+  d_cond: 128 # mdlm
+  max_length: ${predictor.max_length}
+  force_flash_attn: false
+
+tags:
+  model: ddit_small_mdlm

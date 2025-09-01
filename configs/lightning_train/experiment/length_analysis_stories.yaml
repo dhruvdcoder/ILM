@@ -1,0 +1,3 @@
+# @package _global_
+defaults:
+  - idlm_stories_diffusion_loglinear

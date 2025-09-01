@@ -1,0 +1,23 @@
+# @package _global_
+
+lightning_module:
+  _target_: pcdd.diffusion.it.ITLightningModule
+
+loss:
+  _target_: pcdd.diffusion.it.ITUniformCE
+  loss_on_padding: false
+  eos_weight: 1.0
+
+predictor:
+  _target_: pcdd.diffusion.it.ITPredictor
+  tokenizer: ${lightning_module:tokenizer}
+  noise_schedule: ${lightning_module:noise_schedule}
+  max_steps: ??? # depends on the dataset
+  max_length: ??? # depends on the dataset
+  sampling_method: sample_top_p
+  p: 0.5
+  second_sampling_method: sample_top_k
+  second_top: 1
+
+tags:
+  model_type: it

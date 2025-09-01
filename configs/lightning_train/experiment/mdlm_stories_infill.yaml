@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - mdlm_stories_generate
+  - /datamodule@generation.datamodule: mdlm_stories_infill
+
+
+job_type: generate
+job_name: mdlm_stories_infill
+
+predictor:
+  max_steps: 1024
+
+
+tags:
+  prediction_dataset: stories
+  prediction_task: infill

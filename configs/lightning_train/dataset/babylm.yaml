@@ -1,0 +1,30 @@
+# @package _global_
+
+datamodule:
+  hf_dataset_kwargs:
+    # Anything that goes into `datasets.load_dataset`
+    # https://huggingface.co/docs/datasets/v3.1.0/en/package_reference/loading_methods#datasets.load_dataset
+    # execpt split
+    path: vesteinn/babylm
+  dataset_name: babylm
+  detokenizer: null
+  tokenizer:
+    _target_: pcdd.datamodule.base.create_tokenizer_from_file
+    tokenizer_path: data/babylm/tokenizer.json
+    eos_token: "<|eos|>"
+    pad_token: "<|pad|>" 
+    mask_token: "<|mask|>"
+  collation_strategy: pad
+  block_size: 128 # not used with pad strategy
+  train_split: train
+  val_split: validation
+  test_split: test
+  text_field_name: text
+
+predictor:
+  max_steps: 5
+  max_length: 10
+
+tags:
+  dataset: babylm
+  tokenizer: babylm

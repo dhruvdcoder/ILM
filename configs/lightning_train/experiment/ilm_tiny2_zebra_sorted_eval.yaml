@@ -1,0 +1,21 @@
+# @package _global_
+defaults:
+- ilm_tiny2_zebra_sorted
+
+job_type: eval
+
+eval:
+  checkpoint_path: ???
+  split: test
+
+compile: false
+
+predictor:
+  stopping_threshold: 0.5
+  # not used for reported eval
+  sampling_method: sample_top_k
+  top: 1
+  p: 0.5
+  second_sampling_method: null
+  second_top: 1
+  second_p: 0.5

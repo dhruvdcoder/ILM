@@ -1,0 +1,11 @@
+# @package _global_
+defaults:
+- override /model_type: ilm_stopping
+- override /model: rotary_transformer_small_ilm_stopping
+- override /datamodule: ilm_stopping_lm1b
+- override /dataset: lm1b_v2
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+
+model:
+  final_layer_without_normalization: true

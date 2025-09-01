@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - it_vstar_medium
+  - override /dataset: vstar_small_v2
+
+
+predictor:
+  sampling_method: sample_top_p
+  top: 1
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  second_p: 0.2
+  stopping_threshold: 0.9
+
+tags:
+  decoding_strategy: stochastic

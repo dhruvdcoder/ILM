@@ -1,0 +1,48 @@
+# @package _global_
+defaults:
+  - override /callbacks: debug_v2
+  - override /loggers: debug
+
+paths:
+  log_dir: ${paths.root_dir}/debug_logs/efficiency
+
+global_flags:
+  DEBUG: true
+
+datamodule:
+  num_dataset_workers: 1 # does not accept 0
+  global_batch_size: 50
+  train_dataloader_kwargs:
+    num_workers: 2
+    batch_size: 50
+    persistent_workers: true
+    shuffle: false
+    pin_memory: true
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  num_training_steps: 10000
+
+trainer:
+  max_steps: 10000
+  log_every_n_steps: 1
+  enable_checkpointing: false
+  val_check_interval: null
+  check_val_every_n_epoch: 3
+  num_sanity_val_steps: 0
+  gradient_clip_val: 1.0
+
+generative_perplexity:
+  evaluators: null
+
+checkpointing_dir: ${paths.output_dir}/checkpoints
+
+tags:
+  debug: true
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1 # Print every step while debugging

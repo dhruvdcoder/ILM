@@ -1,0 +1,38 @@
+# @package _global_
+
+datamodule:
+  grammar:
+    _target_: pcdd.datamodule.grammar.CFG.fromstring
+    input: |-
+      S -> NP VP | NP Vindirect C S
+      NP -> NProp | Det N | Det A N | NP PP | NP Poss NP
+      PP -> P NP
+      VP -> Vintr | Vtr NP | VP PP
+      A -> 'big' | 'small' | 'happy' | 'sad'
+      C -> 'that'
+      Det -> 'the' | 'my' | 'your'
+      N -> 'man' | 'telescope' | 'elephant'
+      NProp -> 'John' | 'Mary' | 'Alice'
+      Vintr -> 'sneezed' | 'laughed'
+      Vtr -> 'chased' | 'bought'
+      Vindirect -> 'said' | 'thought'
+      P -> 'with' | 'under'
+      Poss -> '`s'
+
+  # Generation parameters
+  max_depth: 5        # maximum parse depth for generation. (5=600k total samples, with max length 13)
+  train_size: 0.7      # fraction of data in train split
+  val_size: 0.1        # fraction of data in val split
+  test_size: 0.2       # fraction of data in test split
+  # 
+  block_size: 15
+
+
+
+predictor:
+  max_length: ${datamodule.block_size}
+  max_steps: 100 
+  
+tags:
+  dataset: grammar
+  tokenizer: space

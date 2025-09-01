@@ -1,0 +1,4 @@
+defaults:
+  - star_idlm
+
+_target_: pcdd.datamodule.star_v2.StarGraphDataModuleForILMWithLengthClassification

@@ -1,0 +1,12 @@
+# @package _global_
+defaults:
+- idlm_vstar_medium
+
+job_type: eval
+
+eval:
+  checkpoint_path: ???
+  split: test
+
+
+compile: false

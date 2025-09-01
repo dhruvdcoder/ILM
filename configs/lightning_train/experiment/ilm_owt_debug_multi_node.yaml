@@ -1,0 +1,44 @@
+# @package _global_
+defaults:
+- override /model_type: ilm
+- override /model: rotary_transformer_small_ilm
+- override /datamodule: ilm_stopping_owt
+- override /dataset: owt
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+- _self_
+
+global_flags:
+  DEBUG_OWT: true
+
+model:
+  final_layer_without_normalization: true
+
+compile: true
+trainer:
+  max_steps: 200_000 # 1000_000
+  precision: bf16-mixed
+  val_check_interval: 20000
+
+datamodule:
+  train_dataloader_kwargs:
+    batch_size: 64
+  predict_dataloader_kwargs:
+    batch_size: 64
+    drop_last: false
+    pin_memory: false
+
+callbacks:
+  checkpoint_every_n_steps:
+    every_n_train_steps: 1000
+    keep_multiple: 100 # Keep every (keep_multiple * every_n_train_steps) permanently
+
+loss:
+  _target_: pcdd.diffusion.ilm_v2.ILMLossWithMaskedCEForWrappedPaddedSequences
+
+generative_perplexity:
+  evaluators: null
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}

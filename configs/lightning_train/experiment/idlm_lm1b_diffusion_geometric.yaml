@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+  - idlm_lm1b
+  - override /noise_schedule: idlm_geometric
+
+noise_schedule:
+  sigma_min: 0.1
+  sigma_max: 120
+
+loss:
+  loss_on_padding: false
+  use_constraint: false
+  use_diffusion_weight_for_ce: false
+  use_diffusion_weight_for_length_loss: false
+  use_n_drops_for_ce: false
+  length_loss: "diffusion"
+  ce_weight: 1.0
+  length_loss_weight: 1.0
+

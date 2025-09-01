@@ -1,0 +1,24 @@
+# @package _global_
+global_flags:
+  DEBUG: true
+  PROFILE: true
+
+max_length: 6
+braching_factor: 3
+
+batch_size: 64
+trees_output_dir: ${paths.output_dir}/trees
+data:
+  dataset:
+    split: train[:20000]
+
+job_name: debug_generate_trees
+
+tags:
+  debug: true
+
+hydra:
+  job_logging:
+    loggers:
+      __main__:
+        level: DEBUG

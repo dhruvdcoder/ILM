@@ -1,0 +1,30 @@
+# @package _global_
+defaults:
+  - mdlm_vstar_medium
+  - /generation: default
+
+# python src/pcdd/commands/lightning_main_v2.py experiment=mdlm_stories_generate generation.ckpt_path=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/mdlm_stories/checkpoints/11-50000.ckpt generation.output_dir=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/mdlm_stories/predictions/11-50000 generation.output_file_name=unconditional_stories_max_steps_512 predictor.max_steps=512
+
+job_type: generate
+job_name: mdlm_vstar_medium_generate
+compile: false
+
+generation:
+  ckpt_path: ???
+  output_dir: ???
+  split: test
+  prepare_input_batch_for_prediction: True
+  fields_to_keep_in_output:
+  - "text"
+  - "history"
+  - "input_text"
+
+
+predictor:
+  max_steps: ???
+
+
+
+tags:
+  prediction_dataset: vstar_medium_v2
+  prediction_task: with_history

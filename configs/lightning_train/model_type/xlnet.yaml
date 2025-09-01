@@ -1,0 +1,19 @@
+# @package _global_
+
+lightning_module:
+  _target_: pcdd.diffusion.xlnet.XLNetLightningModule
+
+loss:
+  _target_: pcdd.diffusion.xlnet.XLNetLoss
+
+
+predictor:
+  _target_: pcdd.diffusion.xlnet.HFXLNetPredictor
+  tokenizer: ${lightning_module:tokenizer}
+  max_length: ??? # depends on the dataset
+  sampling_method: sample_top_k
+  p: 0.5
+  top: 10
+
+tags:
+  model_type: xlnet

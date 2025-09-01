@@ -1,0 +1,26 @@
+# @package _global_
+# defaults:
+#   - _self_
+#   - datamodule: ${dataset}_${collation_strategy} # use if needed
+datamodule:
+  hf_dataset_kwargs:
+    path: null #we don't load from hub
+  dataset_name: repeated_chars
+  tokenizer:
+    _target_: pcdd.datamodule.base.LowerCaseCharTokenizer
+  train_split: train 
+  val_split: val
+  test_split: test
+  detokenizer: lm1b
+  collation_strategy: pad_truncate
+  block_size: 60
+  text_field_name: text
+
+predictor:
+  max_length: 60
+  max_steps: 1000
+
+  
+tags:
+  dataset: repeated_chars
+  tokenizer: lower_case_char

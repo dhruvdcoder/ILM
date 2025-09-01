@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - rotary_transformer_small_ilm
+
+model:
+  _target_: pcdd.models.ilm.RotaryTransformerILMModelWithStoppingClassification

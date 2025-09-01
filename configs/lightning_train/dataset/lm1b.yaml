@@ -1,0 +1,29 @@
+# @package _global_
+# defaults:
+#   - _self_
+#   - datamodule: ${dataset}_${collation_strategy} # use if needed
+datamodule:
+  hf_dataset_kwargs:
+    # Anything that goes into `datasets.load_dataset`
+    # https://huggingface.co/docs/datasets/v3.1.0/en/package_reference/loading_methods#datasets.load_dataset
+    # execpt split
+    path: lm1b #billion-word-benchmark/lm1b
+  dataset_name: lm1b
+  tokenizer:
+    _target_: pcdd.datamodule.base.create_bert_tokenizer
+  train_split: train 
+  val_split: test # from mdlm
+  test_split: null # from mdlm
+  detokenizer: lm1b
+  collation_strategy: pad_truncate # from mdlm
+  block_size: 128 # from mdlm
+  text_field_name: text
+
+predictor:
+  max_length: ${datamodule.block_size}
+  max_steps: 200
+
+  
+tags:
+  dataset: lm1b
+  tokenizer: bert-base-uncased

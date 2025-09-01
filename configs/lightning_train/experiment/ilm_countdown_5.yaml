@@ -1,0 +1,55 @@
+# @package _global_
+defaults:
+- override /model_type: ilm_stopping
+- override /model: rotary_transformer_small_ilm_stopping
+- override /datamodule: countdown_ilm_stopping
+- override /dataset: countdown_5
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+
+model:
+  final_layer_without_normalization: true
+
+lightning_module:
+  _target_: pcdd.diffusion.ilm_v2.ILMWithStoppingClassificationLightningModuleForCountdown
+
+predictor:
+  sampling_method: sample_top_k
+  top: 1
+  second_sampling_method: sample_top_k
+  second_top: 1
+
+compile: true
+
+loss:
+  stopping_loss_weight: 0.001
+
+trainer:
+  precision: bf16-mixed
+  val_check_interval: null
+  check_val_every_n_epoch: 50
+  max_steps: -1
+  max_epochs: 600
+
+generative_perplexity:
+  evaluators: null
+
+optimizer:
+  lr: 0.001
+
+callbacks:
+  checkpoint_every_n_steps:
+    every_n_train_steps: 5000
+    keep_multiple: 5
+  checkpoint_monitor:
+    monitor: val/ce
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 2000
+
+tags:
+  compile: ${compile}
+  precision: ${trainer.precision}
+
+

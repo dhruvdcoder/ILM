@@ -1,0 +1,46 @@
+# @package _global_
+defaults:
+- override /model_type: arlm
+- override /model: rotary_transformer_small_arlm
+- override /datamodule: zebra_arlm
+- override /dataset: zebra
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+
+lightning_module:
+  _target_: pcdd.diffusion.arlm.ARLMLightningModuleForZebra
+
+predictor:
+  sampling_method: sample_top_k
+  top: 1
+
+compile: true
+
+trainer:
+  precision: bf16-mixed
+  val_check_interval: 10000
+  check_val_every_n_epoch: null
+  max_steps: 200_000
+
+generative_perplexity:
+  evaluators: null
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 1000
+
+callbacks:
+  checkpoint_every_n_steps:
+    every_n_train_steps: 5000
+    keep_multiple: 2
+  checkpoint_monitor:
+    monitor: val/nll
+
+tags:
+  compile: ${compile}
+  precision: ${trainer.precision}
+
+

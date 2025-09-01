@@ -1,0 +1,14 @@
+# @package _global_
+
+dataset:
+  _target_: datasets.load_dataset
+  path: AvinashAmballa/LM1B_Masked-Chunks-20
+  split: test
+
+job_name: lm1b_infill_multi_nll
+
+output_file: /scratch3/workspace/dhruveshpate_umass_edu-pcdd-p/pcdd-p/logs/ilm_lm1b_multinode_v5/infill-multi-20/16-1000000/data.only_metrics.jsonl
+output_samples_file: /scratch3/workspace/dhruveshpate_umass_edu-pcdd-p/pcdd-p/logs/ilm_lm1b_multinode_v5/infill-multi-20/16-1000000/data.sample_metrics.jsonl
+
+tags:
+  dataset: lm1b_infill_multi

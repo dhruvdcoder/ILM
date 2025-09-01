@@ -1,0 +1,4 @@
+# @package _global_
+defaults:
+  - ilm_zebra
+  - override /dataset: zebra_sorted

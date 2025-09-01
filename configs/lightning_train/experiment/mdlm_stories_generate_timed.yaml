@@ -1,0 +1,26 @@
+# @package _global_
+defaults:
+  - mdlm_stories_generate
+
+
+job_type: generate
+job_name: mdlm_stories_generate_timed
+
+generation:
+  ckpt_path: ???
+  output_dir: ???
+  fields_to_keep_in_output:
+    - "text"
+    - "time_taken"
+
+predictor:
+  max_steps: ???
+
+datamodule:
+  num_unconditional_samples: 1000
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+tags:
+  prediction_dataset: stories
+  prediction_task: unconditional_timed_${predictor.max_steps}

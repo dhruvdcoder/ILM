@@ -1,0 +1,11 @@
+# @package _global_
+defaults:
+- ilm_tiny_zebra
+
+job_type: eval
+
+eval:
+  checkpoint_path: ???
+  split: test
+
+compile: false

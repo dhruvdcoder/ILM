@@ -1,0 +1,56 @@
+# @package _global_
+defaults:
+- override /model_type: ilm_stopping
+- override /model: rotary_transformer_xtiny2_ilm_stopping
+- override /datamodule: star_ilm_stopping
+- override /dataset: vstar_small_v2
+- override /collation_strategy: default
+- override /noise_schedule: dummy
+
+compile: false
+
+model:
+  force_flash_attn: false
+  final_layer_without_normalization: true
+  
+trainer:
+  precision: bf16-mixed
+  devices: 1
+  num_nodes: 1
+  max_steps: 50000
+  val_check_interval: null
+  check_val_every_n_epoch: 2
+
+lightning_module:
+  _target_: pcdd.diffusion.ilm_v2.ILMWithStoppingClassificationLightningModuleForStarGraphs
+
+predictor:
+  sampling_method: sample_top_k
+  top: 1
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  second_p: 0.2
+  stopping_threshold: 0.5
+
+datamodule:
+  train_dataloader_kwargs:
+    batch_size: 64
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 500
+
+callbacks:
+  checkpoint_monitor:
+    monitor: val/accumulated_loss
+
+generative_perplexity:
+  evaluators: null
+
+tags:
+  compile: ${compile}
+  precision: ${trainer.precision}

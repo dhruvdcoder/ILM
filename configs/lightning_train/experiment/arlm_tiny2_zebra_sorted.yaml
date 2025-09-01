@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+- arlm_zebra_sorted
+- override /model: rotary_transformer_tiny2_arlm
+
+
+optimizer:
+  lr: 0.001
+
+trainer:
+  max_steps: -1 # does not take null to disable but -1
+  max_epochs: 300
+  check_val_every_n_epoch: null
+  val_check_interval: 10_000
+
+datamodule:
+  train_dataloader_kwargs:
+    batch_size: 256
+  

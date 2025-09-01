@@ -1,0 +1,25 @@
+# @package _global_
+# python src/pcdd/commands/lightning_main_v2.py experiment=ilm_lm1b_generate generation.ckpt_path=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/ilm_lm1b_stories/checkpoints/11-50000.ckpt
+defaults:
+  - ilm_lm1b
+  - /generation: default
+
+job_type: generate
+job_name: ilm_lm1b_generate
+generation:
+  ckpt_path: ???
+  output_dir: null
+
+predictor:
+  sampling_method: sample_top_p
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  max_steps: 128
+  max_length: 128
+  stopping_threshold: 0.9
+
+
+tags:
+  prediction_dataset: lm1b
+  prediction_task: unconditional

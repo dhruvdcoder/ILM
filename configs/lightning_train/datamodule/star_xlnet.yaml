@@ -1,0 +1,7 @@
+defaults:
+  - star_idlm
+
+_target_: pcdd.datamodule.star_v2.StarGraphDataModuleForXLNet
+
+tokenizer: 
+  _target_: pcdd.datamodule.star_v2.StarGraphTokenizerForXLNet

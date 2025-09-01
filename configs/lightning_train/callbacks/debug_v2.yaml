@@ -1,0 +1,7 @@
+defaults:
+  - file_friendly_progress_bar
+  - learning_rate_monitor
+  - ema
+#  - print_batch_v2 # don't need it now. Set as a hook in the LightningModule
+#  - speed_monitor
+#  - log_gradients_to_tensorboard

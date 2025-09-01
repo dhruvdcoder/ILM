@@ -1,0 +1,33 @@
+# @package _global_
+defaults:
+  #- /callbacks/unconditional_samples #CLEANUP: Don't need this for prediction in v2
+  - override /callbacks: debug_v2
+  - override /loggers: debug
+
+paths:
+  log_dir: ${paths.root_dir}/debug_logs
+
+datamodule:
+  num_dataset_workers: 1 # does not accept 0
+  global_batch_size: 1
+  train_dataloader_kwargs:
+    num_workers: 0
+    batch_size: 1
+    prefetch_factor: null # can't be non-null with num_workers=0
+    persistent_workers: False # can't be True with num_workers=0
+  
+lr_scheduler:
+  num_warmup_steps: 100
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1 # Print every step while debugging
+  job_logging:
+    loggers:
+      __main__:
+        level: DEBUG
+      datasets:
+        level: DEBUG
+      datasets.arrow_dataset:
+        level: DEBUG

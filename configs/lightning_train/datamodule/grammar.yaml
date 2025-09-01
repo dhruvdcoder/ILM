@@ -1,0 +1,55 @@
+_target_: pcdd.datamodule.grammar.CFGDataModule
+manual_cache_dir: ${oc.env:DATA_DIR, data}
+
+# Grammar specification: you can point to a grammar file or inline it
+grammar: ??? # set by dataset config
+
+# Noise schedule module
+noise_schedule: ${noise_schedule}
+
+# Generation parameters
+max_depth: ??? # set by dataset config
+train_size: ??? # set by dataset config
+val_size: ??? # set by dataset config
+test_size: ??? # set by dataset config
+
+# Overwrite cached splits
+rewrite_manual_cache: false
+
+# DataLoader kwargs
+train_dataloader_kwargs:
+  batch_size: 64
+  num_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}} 
+  shuffle: null # can't specify shuffle for IterableDataset
+  pin_memory: True
+  persistent_workers: False
+  prefetch_factor: 5
+  drop_last: True
+
+val_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: ${..train_dataloader_kwargs.pin_memory}
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+
+test_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: ${..train_dataloader_kwargs.pin_memory}
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+
+predict_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: False
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+
+# Sequence/block parameters
+block_size: 128
+num_unconditional_samples: null
+
+# Global batch size (for multi-GPU)
+global_batch_size: ${.train_dataloader_kwargs.batch_size}

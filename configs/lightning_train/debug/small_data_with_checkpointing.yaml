@@ -1,0 +1,26 @@
+# @package _global_
+defaults:
+  - small_data
+
+
+checkpointing_dir: temp
+resume_from_checkpoint: true
+
+trainer:
+  enable_checkpointing: true
+
+callbacks:
+  checkpoint_every_n_steps:
+    _target_: pcdd.utils.checkpoint_with_thinning.ThinningCheckpoint
+    save_top_k: -1 # Do not save any "best" models; this callback is being used to save every n train steps
+    save_last: True # save model as ${checkpointing_dir}/checkpoints/last.ckpt
+    dirpath: ${checkpointing_dir}
+    verbose: True
+    auto_insert_metric_name: False
+    every_n_train_steps: 50
+    keep_multiple: 10 # Keep every (keep_multiple * every_n_train_steps) permanently
+  on_exception_checkpoint:
+    #_target_: lightning.pytorch.callbacks.OnExceptionCheckpoint
+    _target_: pcdd.utils.on_exception_checkpoint.OnExceptionCheckpoint
+    dirpath: ${checkpointing_dir}
+    filename: on_exception

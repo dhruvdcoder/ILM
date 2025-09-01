@@ -1,0 +1,4 @@
+# @package _global_
+defaults:
+  - override /callbacks: debug_v2
+  - override /loggers: debug

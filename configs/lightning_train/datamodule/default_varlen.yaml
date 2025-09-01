@@ -1,0 +1,6 @@
+defaults:
+  - default
+
+_target_: pcdd.datamodule.VarLenDiffusionForTextDataModule
+
+noise_schedule: ${noise_schedule}

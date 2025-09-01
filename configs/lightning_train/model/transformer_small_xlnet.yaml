@@ -1,0 +1,18 @@
+# @package _global_
+
+
+model:
+  _target_: pcdd.models.xlnet.hf_xlnet.XLNetTransformer
+  num_embeddings: ${tokenizer:full_vocab_size}
+  d_model: 768 # mdlm
+  num_layers: 12
+  nhead: 12
+  padding_idx: ${tokenizer:pad_token_id}
+  dim_feedforward: ${eval:${.d_model}*4}
+  dropout: 0.1
+  activation: "gelu"
+  layer_norm_eps: 1e-5
+
+tags:
+  model: xlnet
+  length_model: none

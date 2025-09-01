@@ -1,0 +1,40 @@
+# @package _global_
+defaults:
+  - override /callbacks: debug_v2
+  - override /loggers: debug
+
+compile: true
+
+paths:
+  log_dir: ${paths.root_dir}/debug_logs
+
+datamodule:
+  global_batch_size: 10
+  train_dataloader_kwargs:
+    num_workers: 0
+    batch_size: 10
+    prefetch_factor: null # can't be non-null with num_workers=0
+    persistent_workers: False # can't be True with num_workers=0
+
+trainer:
+  max_epochs: null
+  max_steps: 1000 #1000_000
+  overfit_batches: 100 #500 # 500
+  val_check_interval: 100 #null # 5000
+  check_val_every_n_epoch: null #1
+  log_every_n_steps: 1
+  gradient_clip_val: 1.0
+  num_sanity_val_steps: 0
+  enable_checkpointing: null
+  precision: bf16-mixed
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  num_warmup_steps: 10
+  num_training_steps: ${trainer.max_steps}
+  fraction_warmup_steps: null 
+
+generative_perplexity:
+  evaluators: null

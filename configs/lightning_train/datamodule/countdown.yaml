@@ -1,0 +1,38 @@
+_target_: ??? # set based on the model
+manual_cache_dir: ${oc.env:DATA_DIR, data}
+version: 5
+tokenizer: 
+  _target_: ??? # set based on the model
+train_dataloader_kwargs:
+  #batch_size:  384 # per device, depends on the device type
+  batch_size: 700
+  num_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}} 
+  shuffle: True
+  pin_memory: True
+  persistent_workers: True
+  drop_last: False
+val_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size} # same as training batch size to avoid recompilation
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: ${..train_dataloader_kwargs.pin_memory}
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: False
+test_dataloader_kwargs: 
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: ${..train_dataloader_kwargs.pin_memory}
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: False
+predict_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: ${..train_dataloader_kwargs.pin_memory}
+  persistent_workers: ${..train_dataloader_kwargs.persistent_workers}
+  drop_last: False
+noise_schedule: ${noise_schedule}
+block_size: 80
+rewrite_manual_cache: false
+global_batch_size: ${.train_dataloader_kwargs.batch_size}

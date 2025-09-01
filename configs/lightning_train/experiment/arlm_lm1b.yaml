@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+- override /model_type: arlm
+- override /model: rotary_transformer_small_arlm
+- override /datamodule: arlm_lm1b
+- override /dataset: lm1b_v2
+- override /collation_strategy: default
+- override /noise_schedule: dummy

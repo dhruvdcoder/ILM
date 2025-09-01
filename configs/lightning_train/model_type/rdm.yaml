@@ -1,0 +1,20 @@
+# @package _global_
+
+lightning_module:
+  _target_: pcdd.diffusion.mdlm_v2.MDLMLightningModule
+
+loss:
+  _target_: pcdd.diffusion.mdlm_v2.MDLMLoss
+  loss_on_padding: true
+
+predictor:
+  _target_: pcdd.diffusion.mdlm_v2.RDMPredictor
+  tokenizer: ${lightning_module:tokenizer}
+  noise_schedule: ${lightning_module:noise_schedule}
+  max_steps: ??? # depends on the dataset
+  max_length: ??? # depends on the dataset
+  return_history: True
+
+
+tags:
+  model_type: mdlm

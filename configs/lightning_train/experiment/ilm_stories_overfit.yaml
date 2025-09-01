@@ -1,0 +1,56 @@
+# @package _global_
+defaults:
+  - ilm_stories
+  - /debug/debug_callbacks
+  - _self_
+
+global_flags:
+  DEBUG_OVERFIT: true
+
+paths:
+  log_dir: ${paths.root_dir}/debug_logs/overfit_stories
+
+compile: false
+trainer:
+  overfit_batches: 1
+  max_steps: 10_000
+  val_check_interval: 200
+  check_val_every_n_epoch: null
+  precision: 32
+  num_sanity_val_steps: 0
+
+predictor:
+  stopping_threshold: 0.9
+  sampling_method: sample_top_k
+  top: 1
+
+datamodule:
+  global_batch_size: 1
+  train_dataloader_kwargs:
+    batch_size: 1
+    num_workers: 0
+    pin_memory: false
+    drop_last: false
+    persistent_workers: false
+    prefetch_factor: null
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 2
+  num_training_steps: ${trainer.max_steps}
+  fraction_warmup_steps: null 
+
+generative_perplexity:
+  evaluators: null
+  num_samples: 1
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1

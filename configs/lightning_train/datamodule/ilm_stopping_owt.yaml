@@ -1,0 +1,7 @@
+defaults:
+  - owt
+
+_target_: pcdd.datamodule.owt.OWTForILMStoppingDataModule
+tokenizer:
+  _target_: pcdd.datamodule.datamodule.GPT2TokenizerForILMFast.from_pretrained
+  pretrained_model_name_or_path: gpt2

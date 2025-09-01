@@ -1,0 +1,14 @@
+# @package _global_
+defaults:
+  - gpt2
+
+model:
+  num_layers: 8
+  nhead: 8
+  d_model: 576
+  dim_feedforward: ${eval:${.d_model}*6}
+
+  
+
+tags:
+  model: gpt2_tiny2

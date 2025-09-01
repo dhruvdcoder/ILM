@@ -1,0 +1,5 @@
+# @package _global_
+generation:
+  ckpt_path: ???
+  output_dir: null
+  compute_generative_perplexity: false

@@ -1,0 +1,69 @@
+# @package _global_
+
+defaults:
+- override /model_type: ilm_stopping
+- override /model: rotary_transformer_small_ilm_stopping
+- override /datamodule: ilm_stopping_grammar
+- override /dataset: grammar
+- override /collation_strategy: default
+#- override /noise_schedule: idlm_loglinear
+- override /noise_schedule: dummy
+
+lightning_module:
+  _target_: pcdd.diffusion.ilm_v2.ILMLightningModuleForCFG
+
+model:
+  final_layer_without_normalization: true
+
+compile: true
+
+
+predictor:
+  sampling_method: sample_top_p
+  p: 0.2
+  second_sampling_method: sample_top_k
+  second_top: 1
+  max_steps: 100
+  max_length: ${datamodule.block_size}
+
+trainer:
+  max_steps: 100_000
+  precision: bf16-mixed
+  check_val_every_n_epoch: null 
+  val_check_interval: 1000
+
+optimizer:
+  lr: 0.0001
+
+datamodule:
+  global_batch_size: 256
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128. Will use around 38 GB VRAM
+    batch_size: 256 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 256 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+    drop_last: false
+    pin_memory: false
+  
+  
+callbacks:
+  checkpoint_monitor:
+    monitor: val/ce
+  checkpoint_every_n_steps:
+    every_n_train_steps: 1000
+    keep_multiple: 5
+
+
+generative_perplexity:
+  evaluators: null
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 100
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

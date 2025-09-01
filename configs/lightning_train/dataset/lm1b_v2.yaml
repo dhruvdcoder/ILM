@@ -1,0 +1,9 @@
+# @package _global_
+
+predictor:
+  max_length: ${datamodule.block_size}
+  max_steps: 300 
+  
+tags:
+  dataset: lm1b
+  tokenizer: bert-base-uncased

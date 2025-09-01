@@ -1,0 +1,50 @@
+defaults:
+  - _self_
+  - paths: default
+  - hydra: default
+  # Pull in the defaults for scaffolding
+  - loggers: null
+  - experiment: null
+  - debug: null
+
+# example usage: model=absorbing_ddit_small noise_schedule=discrete_time_linear dataset=babylm collation_strategy=pad model_type=discrete_time_absorbing
+
+# Keep common utils
+hydra:
+  job:
+    env_set:
+      PROJECT_ROOT: "."
+      OMP_NUM_THREADS: "1"
+  searchpath:
+    - file://${oc.env:PROJECT_ROOT}/configs/common
+
+use_wandb: true
+
+# main config that controls the components
+seed: 1
+
+job_type: data_generative_perplexity
+job_name: ???
+global_flags: null
+dataset: ???
+
+num_examples: null
+output_file: ???
+output_samples_file: ???
+
+device: cuda
+evaluator:
+  batch_size: 2
+  name: llama3_3B
+  model:
+    _target_: transformers.AutoModelForCausalLM.from_pretrained
+    pretrained_model_name_or_path: "/datasets/ai/llama3/hub/models--meta-llama--Llama-3.2-3B/snapshots/13afe5124825b4f3751f836b40dafda64c1ed062"
+  tokenizer:
+    _target_: transformers.AutoTokenizer.from_pretrained
+    pretrained_model_name_or_path: ${..model.pretrained_model_name_or_path}
+
+
+
+tags:
+  debug: false
+  job_type: ${job_type}

@@ -1,0 +1,24 @@
+# @package _global_
+defaults:
+  - mdlm_legacy_lm1b
+  - /generation: default
+  - /datamodule@generation.datamodule: mdlm_legacy_lm1b_infill
+
+
+# init from lm1b
+model_only_checkpoint_path: logs/lm1b_absorbing_predict_pad_legacy/models/14-854500.pt
+
+job_type: generate
+job_name: mdlm_lm1b_infill
+
+predictor:
+  max_steps: 5
+
+generation:
+  output_file_name: infill_max_steps_${predictor.max_steps}.jsonl
+
+
+
+tags:
+  prediction_dataset: lm1b
+  prediction_task: infill

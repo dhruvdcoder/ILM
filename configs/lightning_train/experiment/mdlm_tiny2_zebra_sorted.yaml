@@ -1,0 +1,18 @@
+# @package _global_
+defaults:
+- mdlm_zebra_sorted
+- override /model: ddit_tiny2_mdlm
+
+optimizer:
+  lr: 0.001
+
+trainer:
+  max_epochs: 300
+  check_val_every_n_epoch: null
+  val_check_interval: 10_000
+
+datamodule:
+  train_dataloader_kwargs:
+    batch_size: 256
+
+

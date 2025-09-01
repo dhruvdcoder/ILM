@@ -1,0 +1,13 @@
+# @package _global_
+defaults:
+  - ilm_lm1b
+  - /datamodule@generation.datamodule: ilm_stopping_lm1b_anlg
+
+generation:
+  ckpt_path: ???
+  output_dir: null
+  compute_generative_perplexity: false
+  
+
+tags:
+  prediction_dataset: anlg

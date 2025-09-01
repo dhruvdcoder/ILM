@@ -1,0 +1,26 @@
+#vllm==0.6.4.post1 # pinned vllm will dictate torch version. as of 11/28/24, torch==2.5.1+cu124.
+# Install vllm in a separate environment.
+#--index-url https://download.pytorch.org/whl/cu124
+torch==2.5.1
+# --index-url https://download.pytorch.org/whl/cu124 ; torch==2.5.1+cu124
+# you can change the cuda version but make sure to use torch 2.5.1
+
+jupyter
+lightning==2.3.1 # check https://github.com/Lightning-AI/pytorch-lightning/issues/20280 before updating
+hydra-core
+hydra-colorlog
+hydra-joblib-launcher
+hydra-submitit-launcher
+datasets==3.3.2 # was using 2.15.0 earlier due to some bug.
+transformers
+more-itertools
+torchdata>=0.9.0
+rich
+python-dotenv
+jaxtyping
+tensorboard
+torch-ema
+pydot # optional, for printing torch.compile graphs.
+tabulate # for printing tables.
+pandas
+simple_slurm # for submitting jobs to slurm using python.

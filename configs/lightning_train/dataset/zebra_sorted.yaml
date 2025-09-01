@@ -1,0 +1,9 @@
+# @package _global_
+defaults:
+  - zebra
+
+datamodule:
+  data_format: sorted
+
+tags:
+  dataset: zebra_sorted

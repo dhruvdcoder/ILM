@@ -1,0 +1,7 @@
+defaults:
+  - star_v2
+
+_target_: pcdd.datamodule.star_v2.StarGraphDataModuleForMLM
+
+tokenizer:
+  _target_: pcdd.datamodule.star_v2.StarGraphTokenizerForMLM

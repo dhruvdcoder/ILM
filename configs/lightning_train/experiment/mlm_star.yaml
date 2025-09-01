@@ -1,0 +1,54 @@
+# @package _global_
+defaults:
+- override /model_type: mlm
+- override /model: mlm
+- override /datamodule: star_mlm
+- override /dataset: star_small_v2
+- override /collation_strategy: default
+- override /noise_schedule: loglinear_v2
+
+# DEBUG: python src/pcdd/commands/lightning_main_v2.py experiment=mdlm_vstar_medium debug=overfit_star_v2 job_type=train
+
+compile: false
+trainer:
+  max_steps: 100_000
+  precision: bf16-mixed
+  val_check_interval: null
+  check_val_every_n_epoch: 2
+
+optimizer:
+  lr: 0.0001
+
+lr_scheduler:
+  name: constant_with_warmup
+  num_warmup_steps: 500
+
+datamodule:
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128
+    batch_size: 64
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 64
+    drop_last: false
+    pin_memory: false
+
+lightning_module:
+  _target_: pcdd.diffusion.mlm.MLMLightningModuleForStarGraphs
+
+generative_perplexity:
+  evaluators: null
+
+callbacks:
+  checkpoint_monitor:
+    monitor: val/nll
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 200
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

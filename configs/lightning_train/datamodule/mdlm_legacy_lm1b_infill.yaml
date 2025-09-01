@@ -1,0 +1,20 @@
+defaults:
+  - mdlm_lm1b
+
+_target_: pcdd.datamodule.lm1b.LM1BForMDLMInfillingDataModule
+tokenizer:
+  _target_: pcdd.datamodule.datamodule.LegacyBertTokenizerForMDLMFast.from_pretrained
+infill_dataset_name: lm1b
+infill_percent: 20
+infill_type: single
+num_dataset_workers: 4
+predict_dataloader_kwargs:
+  batch_size: 1
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  drop_last: false
+  pin_memory: false
+
+
+block_size: 128

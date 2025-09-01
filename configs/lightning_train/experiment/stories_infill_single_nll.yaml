@@ -1,0 +1,14 @@
+# @package _global_
+
+dataset:
+  _target_: datasets.load_dataset
+  path: AvinashAmballa/TinyStories_Masked-SingleSentence
+  split: validation
+
+job_name: stories_infill_single_nll
+
+output_file: /scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/ilm_stories_v3/infill-1/23-100000/data.only_metrics.jsonl
+output_samples_file: /scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/ilm_stories_v3/infill-1/23-100000/data.sample_metrics.jsonl
+
+tags:
+  dataset: stories_infill_single

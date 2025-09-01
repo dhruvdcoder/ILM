@@ -1,0 +1,6 @@
+defaults:
+  - countdown
+
+_target_: pcdd.datamodule.countdown.CountdownDataModuleForILMWithLengthClassification
+tokenizer:
+  _target_: pcdd.datamodule.countdown.CountdownTokenizer.from_default_config

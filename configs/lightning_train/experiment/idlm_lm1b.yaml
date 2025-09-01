@@ -1,0 +1,73 @@
+# @package _global_
+defaults:
+- override /model_type: idlm
+- override /model: ddit_small_idlm
+- override /datamodule: idlm_lm1b
+- override /dataset: lm1b_v2
+- override /collation_strategy: default
+- override /noise_schedule: idlm_loglinear
+
+model:
+  final_layer_without_normalization: true
+
+compile: true
+
+noise_schedule:
+  sigma_min: 5
+  sigma_max: 500
+  eps: 1e-3
+
+loss:
+  ce_weight: 1.0
+  length_loss_weight: 1.0
+  length_loss: diffusion
+  use_diffusion_weight_for_ce: false
+  use_diffusion_weight_for_length_loss: false
+  use_incomplete_gamma_factor: false
+  use_n_drops_for_ce: false
+
+predictor:
+  max_steps: 200
+  max_length: 128
+  use_first_step_factor: true
+  sampling_method: sample_top_p
+  p: 0.5
+
+trainer:
+  max_steps: 1000000
+  precision: bf16-mixed
+  val_check_interval: 10000
+  check_val_every_n_epoch: null
+
+optimizer:
+  lr: 0.0001
+
+datamodule:
+  train_dataloader_kwargs:
+    #batch_size: 128 # Can use 128 with bf16-mixed precision and seq_len=128. Will use around 38 GB VRAM
+    batch_size: 128 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+  predict_dataloader_kwargs:
+    #batch_size: 128  # can keep it the same as train_dataloader_kwargs because we will have a max_length check
+    batch_size: 64 # with seq_len=1024 (i.e 8*128), we need to use batch_size=32 on A100 80GB
+    drop_last: false
+    pin_memory: false
+  
+callbacks:
+  checkpoint_monitor:
+    monitor: val/ce
+  checkpoint_every_n_steps:
+    every_n_train_steps: 1000
+    keep_multiple: 10
+  
+generative_perplexity:
+  evaluators: null
+
+hydra:
+  job:
+    env_set:
+      TQDM_MINITERS: 1000
+
+tags:
+  precision: ${trainer.precision}
+  compile: ${compile}
+  debug: false

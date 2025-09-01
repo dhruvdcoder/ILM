@@ -1,0 +1,26 @@
+# @package _global_
+# python src/pcdd/commands/lightning_main_v2.py experiment=ilm_lm1b_generate generation.ckpt_path=/scratch3/workspace/dhruveshpate_umass_edu-text_diffusion/pcdd/logs/ilm_lm1b_stories/checkpoints/11-50000.ckpt
+defaults:
+  - ilm_lm1b_generate_timed
+
+
+generation:
+  ckpt_path: ???
+  output_dir: ???
+  fields_to_keep_in_output:
+    - "text"
+    - "time_taken"
+    - "history"
+
+datamodule:
+  num_unconditional_samples: 1000
+  predict_dataloader_kwargs:
+    batch_size: 1
+
+predictor:
+  return_history: True
+
+
+tags:
+  prediction_dataset: lm1b
+  prediction_task: unconditional_timed_with_history_${predictor.max_steps}

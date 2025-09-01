@@ -1,0 +1,61 @@
+defaults:
+  - _self_
+  - paths: default
+  - hydra: default
+  - data@train_data: babylm
+  - wandb: "off"
+  - experiment: null
+  - debug: null
+  - optional cluster: default
+
+# Keep common utils
+hydra:
+  job_logging:
+    loggers:
+      tokenizers:
+        level: DEBUG
+  job:
+    env_set:
+      PROJECT_ROOT: "."
+      OMP_NUM_THREADS: "1"
+  searchpath:
+    - file://${oc.env:PROJECT_ROOT}/configs/common
+
+seed: 789
+
+
+tokenizer_components:
+  tokenizer:
+    _target_: tokenizers.Tokenizer
+    _args_:
+      - _target_: tokenizers.models.Unigram
+
+  normalizer: 
+    _target_: tokenizers.normalizers.NFKC
+  pre_tokenizer:
+    _target_: tokenizers.pre_tokenizers.ByteLevel
+  decoder:
+    _target_: tokenizers.decoders.ByteLevel
+  trainer:
+    _target_: tokenizers.trainers.UnigramTrainer
+    vocab_size: 2000
+    initial_alphabet:
+      _target_: tokenizers.pre_tokenizers.ByteLevel.alphabet
+    # TODO (trained tokenizer): Special tokens can be appended when using the tokenizer through transformers.PreTrainedTokenizerFast
+    special_tokens: 
+      _target_: builtins.list
+      _args_: 
+        - ["<|pad|>", "<|mask|>", "<|eos|>"]
+
+
+batch_size: 1000
+
+train_data:
+  split: "train+validation+test"
+
+job_name: babylm_unigram_tokenizer
+
+tags:
+  task: Tokenizer
+  dataset: babylm
+

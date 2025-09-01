@@ -1,0 +1,37 @@
+# @package _global_
+defaults:
+  - small_data
+global_flags:
+  DEBUG_OVERFIT: true
+
+paths:
+  log_dir: ${paths.root_dir}/debug_logs/overfit
+
+datamodule:
+  global_batch_size: 10
+  train_dataloader_kwargs:
+    num_workers: 0
+    batch_size: 10
+
+trainer:
+  max_epochs: null
+  max_steps: 20000 #1000_000
+  overfit_batches: 500
+  val_check_interval: 1000
+  check_val_every_n_epoch: null
+  log_every_n_steps: 1
+  gradient_clip_val: 1.0
+  enable_checkpointing: null
+
+optimizer:
+  lr: 0.00005
+
+lr_scheduler:
+  name: cosine
+  num_warmup_steps: 10
+  num_training_steps: ${trainer.max_steps}
+  fraction_warmup_steps: null 
+
+generative_perplexity:
+  evaluators: null
+  num_samples: 1

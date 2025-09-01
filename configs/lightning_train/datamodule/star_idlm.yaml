@@ -1,0 +1,33 @@
+_target_: pcdd.datamodule.star_v2.StarGraphDataModuleForIDLM
+manual_cache_dir: ${oc.env:DATA_DIR, data}
+train_generator: ??? # set by dataset
+val_generator: ??? # set by dataset
+test_generator: ??? # set by dataset
+tokenizer: 
+  _target_: pcdd.datamodule.star_v2.StarGraphTokenizerForIDLM
+  vocab_size: 128
+train_dataloader_kwargs:
+  batch_size:  64 # per device, depends on the device type
+  num_workers: ${oc.decode:${oc.env:SLURM_CPUS_PER_TASK,4}} 
+  shuffle: True
+  pin_memory: True
+val_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size} # same as training batch size to avoid recompilation
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: True
+test_dataloader_kwargs: 
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: True
+predict_dataloader_kwargs:
+  batch_size: ${..train_dataloader_kwargs.batch_size}
+  num_workers: ${..train_dataloader_kwargs.num_workers}
+  shuffle: False
+  pin_memory: True
+noise_schedule: ${noise_schedule}
+
+rewrite_manual_cache: false
+global_batch_size: ${.train_dataloader_kwargs.batch_size}
+block_size: ??? # set by dataset
